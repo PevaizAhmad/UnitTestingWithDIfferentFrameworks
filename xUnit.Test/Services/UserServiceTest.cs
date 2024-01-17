@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FakeItEasy;
+using FluentAssertions;
 using FluentAssertions.Extensions;
 using System;
 using System.Collections.Generic;
@@ -7,18 +8,30 @@ using System.Text;
 using System.Threading.Tasks;
 using TestProject;
 using TestProject.Services.Implementations;
+using TestProject.Services.Interfaces;
 
 namespace xUnit.Test.Services
 {
     public class UserServiceTest
     {
+        public readonly UserService _userService;
+        public readonly IEmployeeService _service;
+
+        public UserServiceTest()
+        {
+            //dependencies
+            _service = A.Fake<IEmployeeService>();
+
+            //SUT
+            _userService = new UserService(_service);
+        }
         [Fact]
         public void UserService_GetName_ReturnString()
         {
             //Arrange - variables, classes, mocks
-            var userService = new UserService();
+            //var userService = new UserService();
             //Act
-            var result = userService.getName();
+            var result = _userService.getName();
 
             //Assert
             result.Should().NotBeNull();
@@ -32,10 +45,10 @@ namespace xUnit.Test.Services
         public void UserService_GetCombinedNameAndEmail_ReturnString(string name, string email, string expectedResult)
         {
             //Arange
-            var userService = new UserService();
+            //var userService = new UserService();
 
             //Act
-            var result = userService.getCombinedNameAndEmail(name, email);
+            var result = _userService.getCombinedNameAndEmail(name, email);
 
             //Assert
             result.Should().NotBeNull();
@@ -48,10 +61,10 @@ namespace xUnit.Test.Services
         public void UserService_IsEmailConfirmed_ReturnBoolean()
         {
             //Arrange
-            var userService = new UserService();
+            //var userService = new UserService();
 
             //Act
-            var result = userService.isEmailConfirmed();
+            var result = _userService.isEmailConfirmed();
 
             //Assert
             result.Should().BeTrue();
@@ -62,9 +75,9 @@ namespace xUnit.Test.Services
         public void UserService_GetUserCreatedDate_ReturnDate()
         {
             //Arrange - variables, classes, mocks
-            var userService = new UserService();
+            //var userService = new UserService();
             //Act
-            var result = userService.getUserCreatedDate();
+            var result = _userService.getUserCreatedDate();
 
             //Assert
             result.Should().NotBeBefore(1.January(2024));
@@ -72,10 +85,10 @@ namespace xUnit.Test.Services
         }
 
         [Fact]
-        public  void UserService_GetUser_ReturnObject()
+        public void UserService_GetUser_ReturnObject()
         {
-            var userService = new UserService();
-            var result = userService.getUser();
+            //var userService = new UserService();
+            var result = _userService.getUser();
 
             result.Should().NotBeNull();
             result.Should().BeOfType<UserModel>();
@@ -85,17 +98,17 @@ namespace xUnit.Test.Services
 
         }
         [Fact]
-        public  void UserService_GetUsers_ReturnObject()
+        public void UserService_GetUsers_ReturnObject()
         {
-            var userService = new UserService();
-            var result = userService.getUsers();
+            //var userService = new UserService();
+            var result = _userService.getUsers();
 
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<IEnumerable<UserModel>>();
 
             result.Should().HaveCountGreaterThanOrEqualTo(1);
             //result.Should().HaveCount(1);  // if we want exact number of count
-            result.Should().Contain(x=>x.IsDeleted == false);
+            result.Should().Contain(x => x.IsDeleted == false);
 
         }
     }

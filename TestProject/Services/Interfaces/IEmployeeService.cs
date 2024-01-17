@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace TestProject.Services.Interfaces
 {
-    public interface ITest
+    public interface IEmployeeService
     {
-        string getName(string name);
+       public string Create(string name);
+       bool DoesEmployeeExist(string name);
     }
 }

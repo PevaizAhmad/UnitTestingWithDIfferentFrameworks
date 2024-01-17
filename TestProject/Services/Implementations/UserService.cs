@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestProject.Services.Interfaces;
 
 namespace TestProject.Services.Implementations
 {
     public class UserService
     {
+        public readonly IEmployeeService _employeeService;
+
+        public UserService(IEmployeeService EmployeeService)
+        {
+            this._employeeService = EmployeeService;
+        }
         public string getName()
         {
             return "Pervaiz Ahmad";
@@ -67,6 +74,20 @@ namespace TestProject.Services.Implementations
             };
 
             return users;
+        }
+
+        public string DoesUserExist(string username)
+        {
+            var result = this._employeeService.DoesEmployeeExist(username);
+
+            if (result)
+            {
+                return "Success: User Exist";
+            }
+            else
+            {
+                return "Failed: User does not exist";
+            }
         }
     }
 }
